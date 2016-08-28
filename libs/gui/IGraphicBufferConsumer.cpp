@@ -222,12 +222,10 @@ public:
 
     virtual ~BpGraphicBufferConsumer();
 
-    virtual status_t acquireBuffer(BufferItem *buffer, nsecs_t presentWhen,
-            uint64_t maxFrameNumber) {
+    virtual status_t acquireBuffer(BufferItem *buffer, nsecs_t presentWhen) {
         Parcel data, reply;
         data.writeInterfaceToken(IGraphicBufferConsumer::getInterfaceDescriptor());
         data.writeInt64(presentWhen);
-        data.writeUint64(maxFrameNumber);
         status_t result = remote()->transact(ACQUIRE_BUFFER, data, &reply);
         if (result != NO_ERROR) {
             return result;
@@ -237,21 +235,6 @@ public:
             return result;
         }
         return reply.readInt32();
-    }
-
-    virtual status_t acquireBuffer(android::BufferItem* buffer,
-            nsecs_t presentWhen) {
-        if (buffer == nullptr) {
-            return BAD_VALUE;
-        }
-
-        BufferItem item;
-        status_t result = acquireBuffer(&item, presentWhen);
-        if (result != NO_ERROR) {
-            return result;
-        }
-        *buffer = item;
-        return NO_ERROR;
     }
 
     virtual status_t detachBuffer(int slot) {
@@ -458,8 +441,7 @@ status_t BnGraphicBufferConsumer::onTransact(
             CHECK_INTERFACE(IGraphicBufferConsumer, data, reply);
             BufferItem item;
             int64_t presentWhen = data.readInt64();
-            uint64_t maxFrameNumber = data.readUint64();
-            status_t result = acquireBuffer(&item, presentWhen, maxFrameNumber);
+            status_t result = acquireBuffer(&item, presentWhen);
             status_t err = reply->write(item);
             if (err) return err;
             reply->writeInt32(result);
