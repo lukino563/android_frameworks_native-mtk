@@ -383,6 +383,17 @@ status_t GLConsumer::acquireBufferLocked(BufferItem *item,
     return NO_ERROR;
 }
 
+status_t GLConsumer::acquireBufferLocked(BufferQueue::BufferItem *outItem,
+        nsecs_t presentWhen) {
+    BufferItem item;
+    status_t result = acquireBufferLocked(&item, presentWhen);
+    if (result != NO_ERROR) {
+        return result;
+    }
+    *outItem = item;
+    return NO_ERROR;
+}
+
 status_t GLConsumer::releaseBufferLocked(int buf,
         sp<GraphicBuffer> graphicBuffer,
         EGLDisplay display, EGLSyncKHR eglFence) {
@@ -396,7 +407,7 @@ status_t GLConsumer::releaseBufferLocked(int buf,
     return err;
 }
 
-status_t GLConsumer::updateAndReleaseLocked(const BufferItem& item,
+status_t GLConsumer::updateAndReleaseLocked(const BufferQueue::BufferItem& item,
         PendingRelease* pendingRelease)
 {
     status_t err = NO_ERROR;

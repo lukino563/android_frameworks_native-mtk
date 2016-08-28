@@ -243,8 +243,7 @@ protected:
 
     // acquireBufferLocked overrides the ConsumerBase method to update the
     // mEglSlots array in addition to the ConsumerBase behavior.
-    virtual status_t acquireBufferLocked(BufferItem *item, nsecs_t presentWhen,
-            uint64_t maxFrameNumber = 0) override;
+    virtual status_t acquireBufferLocked(BufferQueue::BufferItem *item, nsecs_t presentWhen);
 
     // releaseBufferLocked overrides the ConsumerBase method to update the
     // mEglSlots array in addition to the ConsumerBase.
@@ -276,7 +275,7 @@ protected:
     // which would have been passed to releaseBufferLocked upon the successful
     // completion of the method will instead be returned to the caller, so that
     // it may call releaseBufferLocked itself later.
-    status_t updateAndReleaseLocked(const BufferItem& item,
+    status_t updateAndReleaseLocked(const BufferQueue::BufferItem& item,
             PendingRelease* pendingRelease = nullptr);
 
     // Binds mTexName and the current buffer to mTexTarget.  Uses
