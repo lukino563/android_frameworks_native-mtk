@@ -41,6 +41,7 @@ sources := \
     Static.cpp \
     Status.cpp \
     TextOutput.cpp \
+    MediatekHacks.cpp
 
 LOCAL_PATH:= $(call my-dir)
 

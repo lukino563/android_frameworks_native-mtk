@@ -44,7 +44,8 @@ LOCAL_SRC_FILES := \
 	PixelFormat.cpp \
 	Rect.cpp \
 	Region.cpp \
-	UiConfig.cpp
+	UiConfig.cpp \
+	MediatekHacks.cpp
 
 LOCAL_SHARED_LIBRARIES := \
 	libbinder \
